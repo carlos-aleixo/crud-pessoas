@@ -20,6 +20,15 @@ export default function Lista() {
 
   const [modalVisible, setModalVisible] = useState(false);
 
+  const confirmarExclusao = () => {
+    removerPessoa(pessoaSelecionada);
+    setModalVisible(false);
+  };
+
+  const cancelarExclusao = () => {
+    setModalVisible(false);
+  };
+
   /**
    * Esta função é utilizada para renderizar um item da lista.
    * Se o item da lista estiver selecionado, então adota
