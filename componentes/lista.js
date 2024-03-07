@@ -1,5 +1,14 @@
 import { View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
-import { List, Text, IconButton, Divider, useTheme } from 'react-native-paper';
+import {
+  List,
+  Text,
+  IconButton,
+  Divider,
+  useTheme,
+  Modal,
+  Portal,
+  Button,
+} from 'react-native-paper';
 import { useAppContext } from './provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
@@ -100,5 +109,11 @@ const styles = StyleSheet.create({
   },
   item_selecionado: {
     backgroundColor: 'lightgray',
+  },
+  modal: {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 8,
   },
 });
