@@ -2,6 +2,7 @@ import { View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
 import { List, Text, IconButton, Divider, useTheme } from 'react-native-paper';
 import { useAppContext } from './provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useState } from 'react';
 
 /**
  * Este componente apresenta a lista de pessoas cadastradas.
@@ -16,6 +17,8 @@ export default function Lista() {
 
   const { colors, isV3 } = useTheme();
   const safeArea = useSafeAreaInsets();
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   /**
    * Esta função é utilizada para renderizar um item da lista.
@@ -40,7 +43,8 @@ export default function Lista() {
         title={item.nome}
         style={selecionado && styles.item_selecionado}
         onPress={() => selecionarPessoa(item)}
-        right={selecionado && BotaoRemover}></List.Item>
+        right={selecionado && BotaoRemover}
+      ></List.Item>
     );
   };
   return (
@@ -76,7 +80,7 @@ export default function Lista() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, minHeight:200 },
+  container: { flex: 1, minHeight: 200 },
   lista_mensagem_vazio: { marginHorizontal: 16 },
   cabecalho: {
     flex: 1,
