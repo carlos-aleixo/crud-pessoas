@@ -1,41 +1,57 @@
 import { StyleSheet, SafeAreaView } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Appbar, Snackbar } from 'react-native-paper';
+import {
+  Appbar,
+  Snackbar,
+  DefaultTheme,
+  Provider as PaperProvider,
+} from 'react-native-paper';
 import { useState } from 'react';
 
 import { AppProvider } from './componentes/provider';
 import Lista from './componentes/lista';
 import Formulario from './componentes/Formulario';
 
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+  },
+};
+
 export default function App() {
   const [notificacaoVisivel, setNotificacaoVisivel] = useState(false);
   const onDismissNotificacao = () => setNotificacaoVisivel(false);
   const onAdicionarPessoa = () => setNotificacaoVisivel(true);
   return (
-    <SafeAreaProvider>
-      <AppProvider
-        onAdicionarPessoa={onAdicionarPessoa}
-        onSelecionarPessoa={(pessoa) => console.log('selecionado', pessoa)}
-        onRemoverPessoa={(pessoa) => console.log('removido', pessoa)}>
-        <SafeAreaView style={styles.container}>
-          <Appbar.Header>
-            <Appbar.Content title="Cadastro de pessoas" />
-            <Appbar.Action icon="help-circle" />
-          </Appbar.Header>
-          <Formulario />
-          <Lista />
+    <PaperProvider theme={theme}>
+      <SafeAreaProvider>
+        <AppProvider
+          onAdicionarPessoa={onAdicionarPessoa}
+          onSelecionarPessoa={(pessoa) => console.log('selecionado', pessoa)}
+          onRemoverPessoa={(pessoa) => console.log('removido', pessoa)}
+        >
+          <SafeAreaView style={styles.container}>
+            <Appbar.Header>
+              <Appbar.Content title="Cadastro de pessoas" />
+              <Appbar.Action icon="help-circle" />
+            </Appbar.Header>
+            <Formulario />
+            <Lista />
 
-          <Snackbar
-            visible={notificacaoVisivel}
-            onDismiss={onDismissNotificacao}
-            action={{
-              label: 'OK',
-            }}>
-            Cadastro realizado com sucesso!
-          </Snackbar>
-        </SafeAreaView>
-      </AppProvider>
-    </SafeAreaProvider>
+            <Snackbar
+              visible={notificacaoVisivel}
+              onDismiss={onDismissNotificacao}
+              action={{
+                label: 'OK',
+              }}
+            >
+              Cadastro realizado com sucesso!
+            </Snackbar>
+          </SafeAreaView>
+        </AppProvider>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }
 

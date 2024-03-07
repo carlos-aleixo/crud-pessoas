@@ -1,7 +1,17 @@
 import { View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
-import { List, Text, IconButton, Divider, useTheme } from 'react-native-paper';
+import {
+  List,
+  Text,
+  IconButton,
+  Divider,
+  useTheme,
+  Modal,
+  Portal,
+  Button,
+} from 'react-native-paper';
 import { useAppContext } from './provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useState } from 'react';
 
 /**
  * Este componente apresenta a lista de pessoas cadastradas.
@@ -17,6 +27,17 @@ export default function Lista() {
   const { colors, isV3 } = useTheme();
   const safeArea = useSafeAreaInsets();
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const confirmarExclusao = () => {
+    removerPessoa(pessoaSelecionada);
+    setModalVisible(false);
+  };
+
+  const cancelarExclusao = () => {
+    setModalVisible(false);
+  };
+
   /**
    * Esta função é utilizada para renderizar um item da lista.
    * Se o item da lista estiver selecionado, então adota
@@ -31,7 +52,7 @@ export default function Lista() {
         <IconButton
           icon="trash-can-outline"
           mode="contained"
-          onPress={() => removerPessoa(pessoaSelecionada)}
+          onPress={() => setModalVisible(true)}
         />
       );
     };
@@ -40,7 +61,8 @@ export default function Lista() {
         title={item.nome}
         style={selecionado && styles.item_selecionado}
         onPress={() => selecionarPessoa(item)}
-        right={selecionado && BotaoRemover}></List.Item>
+        right={selecionado && BotaoRemover}
+      ></List.Item>
     );
   };
   return (
@@ -71,12 +93,26 @@ export default function Lista() {
           </Text>
         )}
       />
+
+      <Portal>
+        <Modal
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
+          contentContainerStyle={styles.modal}
+        >
+          <View>
+            <Text>Deseja realmente excluir?</Text>
+            <Button onPress={confirmarExclusao}>Sim</Button>
+            <Button onPress={cancelarExclusao}>Cancelar</Button>
+          </View>
+        </Modal>
+      </Portal>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, minHeight:200 },
+  container: { flex: 1, minHeight: 200 },
   lista_mensagem_vazio: { marginHorizontal: 16 },
   cabecalho: {
     flex: 1,
@@ -87,5 +123,11 @@ const styles = StyleSheet.create({
   },
   item_selecionado: {
     backgroundColor: 'lightgray',
+  },
+  modal: {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 8,
   },
 });
