@@ -52,7 +52,7 @@ export default function Lista() {
         <IconButton
           icon="trash-can-outline"
           mode="contained"
-          onPress={() => removerPessoa(pessoaSelecionada)}
+          onPress={() => setModalVisible(true)}
         />
       );
     };
@@ -93,6 +93,20 @@ export default function Lista() {
           </Text>
         )}
       />
+
+      <Portal>
+        <Modal
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
+          contentContainerStyle={styles.modal}
+        >
+          <View>
+            <Text>Deseja realmente excluir?</Text>
+            <Button onPress={confirmarExclusao}>Sim</Button>
+            <Button onPress={cancelarExclusao}>Cancelar</Button>
+          </View>
+        </Modal>
+      </Portal>
     </View>
   );
 }
