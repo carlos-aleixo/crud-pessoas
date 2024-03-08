@@ -1,9 +1,8 @@
-import { StyleSheet, SafeAreaView, Modal, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, SafeAreaView} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   Appbar,
   Snackbar,
-  Button,
   DefaultTheme,
   Provider as PaperProvider,
 } from 'react-native-paper';
