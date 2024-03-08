@@ -1,36 +1,49 @@
-import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, Modal, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Appbar, Snackbar, Button } from 'react-native-paper'; // Importando Button e TextInput
+import {
+  Appbar,
+  Snackbar,
+  Button,
+  DefaultTheme,
+  Provider as PaperProvider,
+} from 'react-native-paper';
+import { useState } from 'react';
+
 import { AppProvider } from './componentes/provider';
 import Lista from './componentes/lista';
 import Formulario from './componentes/Formulario';
 
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+  },
+};
+
 export default function App() {
   const [notificacaoVisivel, setNotificacaoVisivel] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
   const onDismissNotificacao = () => setNotificacaoVisivel(false);
   const onAdicionarPessoa = () => setNotificacaoVisivel(true);
-
   return (
-    <SafeAreaProvider>
-      <AppProvider
-        onAdicionarPessoa={onAdicionarPessoa}
-        onSelecionarPessoa={(pessoa) => console.log('selecionado', pessoa)}
-        onRemoverPessoa={(pessoa) => console.log('removido', pessoa)}
-      >
-        <SafeAreaView style={styles.container}>
-          <Appbar.Header>
-            <Appbar.Content title="Cadastro de pessoas" />
-            <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
-              <Appbar.Action icon="help-circle" size={32} />
-            </TouchableOpacity>
-          </Appbar.Header>
-          <Formulario />
-          <Lista />
+    <PaperProvider theme={theme}>
+      <SafeAreaProvider>
+        <AppProvider
+          onAdicionarPessoa={onAdicionarPessoa}
+          onSelecionarPessoa={(pessoa) => console.log('selecionado', pessoa)}
+          onRemoverPessoa={(pessoa) => console.log('removido', pessoa)}
+        >
+          <SafeAreaView style={styles.container}>
+            <Appbar.Header>
+              <Appbar.Content title="Cadastro de pessoas" />
+              <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
+                <Appbar.Action icon="help-circle" size={32} />
+              </TouchableOpacity>
+            </Appbar.Header>
+            <Formulario />
+            <Lista />
 
-          <Modal
+            <Modal
             animationType="slide"
             transparent={true}
             visible={modalVisible}
@@ -41,18 +54,11 @@ export default function App() {
                 <Text>
                   App para cadastro de pessoas
                   {'\n'}
+                  O Formulário deve ser preenchido e assim que o botão de check for selecionado estará no nosso "banco de dados fake". {'\n'}<Button icon="check-circle" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
                   {'\n'}
-                  O Formulário deve ser preenchido e assim que o botão de check for selecionado estará no nosso "banco de dados fake"
+                  Em caso de edição, o botão com símbolo de lápis já está aparente. {'\n'}<Button icon="pencil-outline" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
                   {'\n'}
-                  {'\n'}
-                  Em caso de edição, o botão com símbolo de lápis já está aparente. {'\n'}<Button icon="pencil" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
-                  {'\n'}
-                  {'\n'}
-                  Em caso de exclusão, o botão com símbolo de lixeira aparecerá assim que selecionar o nome. {'\n'}<Button icon="delete" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
-                  {'\n'}
-                  {'\n'}
-                  O botão com símbolo de marca de seleção será usado para confirmar a ação. {'\n'}<Button icon="check" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
-                  {'\n'}
+                  Em caso de exclusão, o botão com símbolo de lixeira aparecerá assim que selecionar o nome. {'\n'}<Button icon="trash-can-outline" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
                   {'\n'}
                 </Text>
                 <TouchableOpacity onPress={() => setModalVisible(false)}>
@@ -62,18 +68,19 @@ export default function App() {
             </View>
           </Modal>
 
-          <Snackbar
-            visible={notificacaoVisivel}
-            onDismiss={onDismissNotificacao}
-            action={{
-              label: 'OK',
-            }}
-          >
-            Cadastro realizado com sucesso!
-          </Snackbar>
-        </SafeAreaView>
-      </AppProvider>
-    </SafeAreaProvider>
+            <Snackbar
+              visible={notificacaoVisivel}
+              onDismiss={onDismissNotificacao}
+              action={{
+                label: 'OK',
+              }}
+            >
+              Cadastro realizado com sucesso!
+            </Snackbar>
+          </SafeAreaView>
+        </AppProvider>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }
 
@@ -83,9 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ecf0f1',
     padding: 8,
   },
-  button: {
-    padding: 8, // Ajuste o preenchimento conforme necessário
-  },
+
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
