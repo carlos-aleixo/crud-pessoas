@@ -9,6 +9,7 @@ import {
   Portal,
   Button,
   TextInput,
+  Avatar
 } from 'react-native-paper';
 import { useAppContext } from './provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -76,11 +77,21 @@ export default function Lista() {
       />
     );
 
+    const nomeParts = item.nome.split(' ');
+    const primeiroNome = nomeParts[0];
+    const ultimoSobrenome = nomeParts[nomeParts.length - 1];
+    const avatarLabel = (primeiroNome[0] + (ultimoSobrenome ? ultimoSobrenome[0] : '')).toUpperCase();
+
     return (
       <List.Item
         title={item.nome}
         style={selecionado && styles.item_selecionado}
         onPress={() => selecionarPessoa(item)}
+        left={() => (
+          <View style={styles.avatarRow}>
+            <Avatar.Text size={40} label={avatarLabel}/>
+          </View>
+        )}
         right={(props) => (
           <View style={styles.buttonsRow}>
             {selecionado && <BotaoRemover {...props} />}
@@ -102,7 +113,7 @@ export default function Lista() {
             {pessoas?.length > 0 && (
               <Text variant="bodySmall">
                 Pressione um item da lista para selecionar e outra vez para
-                remover a seleção
+                remover a seleção ou editar a seleção
               </Text>
             )}
           </View>
@@ -174,4 +185,9 @@ const styles = StyleSheet.create({
   buttonsRow: {
     flexDirection: 'row',
   },
+  avatarRow: { 
+    flexDirection: 'row', 
+    alignItems: 'center',
+    marginLeft: 16
+  }
 });
