@@ -170,6 +170,7 @@ export default function Lista() {
               value={editingName}
               onChangeText={setEditingName}
               placeholder="Novo nome"
+              onSubmitEditing={confirmarEdicao}
             />
             <Button onPress={confirmarEdicao}>Salvar</Button>
             <Button onPress={cancelarEdicao}>Cancelar</Button>

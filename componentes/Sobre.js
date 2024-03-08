@@ -7,8 +7,8 @@ const BotaoSobre = ({ sobreConteudo }) => {
 
   return (
     <>
-      <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
-        <Appbar.Action icon="help-circle" size={32} />
+      <TouchableOpacity style={styles.button}>
+        <Appbar.Action icon="help-circle" size={32} onPress={() => setModalVisible(true)}/>
       </TouchableOpacity>
 
       <Modal
@@ -29,9 +29,7 @@ const BotaoSobre = ({ sobreConteudo }) => {
               Em caso de exclusão, o botão com símbolo de lixeira aparecerá assim que selecionar o nome. {'\n'}<Button icon="trash-can-outline" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
               {'\n'}
             </Text>
-            <TouchableOpacity onPress={() => setModalVisible(false)}>
-              <Text>Fechar</Text>
-            </TouchableOpacity>
+            <Button onPress={() => setModalVisible(false)}>Fechar</Button>
           </View>
         </View>
       </Modal>
@@ -46,7 +44,7 @@ const BotaoSobre = ({ sobreConteudo }) => {
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'flex-end', // Alinha a modal ao final da tela
+    justifyContent: 'center', // Alinha a modal ao final da tela
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
