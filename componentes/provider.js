@@ -23,6 +23,7 @@ export function AppProvider({
 }) {
   const [pessoas, setPessoas] = useState([]);
   const [pessoaSelecionada, setPessoaSelecionada] = useState();
+  const [pessoasFiltradas, setPessoasFiltradas] = useState();
 
   /**
    * Esta função recebe um parâmetro `nome`, cria um objeto 
@@ -99,6 +100,7 @@ export function AppProvider({
         selecionarPessoa,
         pessoaSelecionada,
         editarPessoa,
+        pessoasFiltradas,
       }}>
       {children}
     </AppContext.Provider>
