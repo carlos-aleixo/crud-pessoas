@@ -80,7 +80,7 @@ export default function Lista() {
     const nomeParts = item.nome.split(' ');
     const primeiroNome = nomeParts[0];
     const ultimoSobrenome = nomeParts[nomeParts.length - 1];
-    const avatarLabel = (primeiroNome[0] + (ultimoSobrenome ? ultimoSobrenome[0] : '')).toUpperCase();
+    const avatarLabel = (primeiroNome[0] + (nomeParts.length > 1 ? ultimoSobrenome[0] : '')).toUpperCase();
 
     return (
       <List.Item
