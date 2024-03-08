@@ -39,6 +39,7 @@ export default function App() {
               <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
                 <Appbar.Action icon="help-circle" size={32} />
               </TouchableOpacity>
+              <Appbar.Action icon="help-circle" />
             </Appbar.Header>
             <Formulario />
             <Lista />
