@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { AppProvider } from './componentes/provider';
 import Lista from './componentes/lista';
 import Formulario from './componentes/Formulario';
+import BotaoSobre from './componentes/Sobre'
 
 const theme = {
   ...DefaultTheme,
@@ -22,7 +23,6 @@ const theme = {
 
 export default function App() {
   const [notificacaoVisivel, setNotificacaoVisivel] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const onDismissNotificacao = () => setNotificacaoVisivel(false);
   const onAdicionarPessoa = () => setNotificacaoVisivel(true);
   return (
@@ -36,37 +36,10 @@ export default function App() {
           <SafeAreaView style={styles.container}>
             <Appbar.Header>
               <Appbar.Content title="Cadastro de pessoas" />
-              <TouchableOpacity style={styles.button} onPress={() => setModalVisible(true)}>
-                <Appbar.Action icon="help-circle" size={32} />
-              </TouchableOpacity>
+              <BotaoSobre sobreConteudo={(setModalVisible) => {false}} />
             </Appbar.Header>
             <Formulario />
             <Lista />
-
-            <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-          >
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
-                <Text>
-                  App para cadastro de pessoas
-                  {'\n'}
-                  O Formulário deve ser preenchido e assim que o botão de check for selecionado estará no nosso "banco de dados fake". {'\n'}<Button icon="check-circle" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
-                  {'\n'}
-                  Em caso de edição, o botão com símbolo de lápis já está aparente. {'\n'}<Button icon="pencil-outline" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
-                  {'\n'}
-                  Em caso de exclusão, o botão com símbolo de lixeira aparecerá assim que selecionar o nome. {'\n'}<Button icon="trash-can-outline" mode="contained" onPress={() => {}} style={styles.roundedIcon} />
-                  {'\n'}
-                </Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Text>Fechar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
 
             <Snackbar
               visible={notificacaoVisivel}
@@ -89,23 +62,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ecf0f1',
     padding: 8,
-  },
-
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    width: '80%',
-    alignSelf: 'center',
-  },
-  roundedIcon: {
-    borderRadius: 25, // Ajuste o valor conforme necessário para tornar o ícone redondo
-    overflow: 'hidden', // Para garantir que o conteúdo dentro do botão seja cortado corretamente
-  },
+  }
 });
