@@ -1,4 +1,5 @@
-import { View, SafeAreaView, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FlatList, TextInput, View, SafeAreaView, StyleSheet } from 'react-native';
 import {
   List,
   Text,
@@ -8,12 +9,10 @@ import {
   Modal,
   Portal,
   Button,
-  TextInput,
   Avatar
 } from 'react-native-paper';
 import { useAppContext } from './provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useState } from 'react';
 
 /**
  * Este componente apresenta a lista de pessoas cadastradas.
@@ -28,9 +27,22 @@ export default function Lista() {
 
   const { colors, isV3 } = useTheme();
   const safeArea = useSafeAreaInsets();
+  const [text, setText] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [editingName, setEditingName] = useState('');
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    // Check if pessoas is available before filtering
+    if (pessoas) {
+      const newData = pessoas.filter((pessoa) =>
+        pessoa.nome.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredData(newData);
+      console.log(newData)
+    }
+  }, [text, pessoas]);
 
   const confirmarExclusao = () => {
     removerPessoa(pessoaSelecionada);
@@ -58,22 +70,20 @@ export default function Lista() {
    * excluir da lista de pessoas.
    */
   const renderItem = ({ item }) => {
-
     const selecionado = item.id == pessoaSelecionada?.id;
 
     const BotaoRemover = () => (
-      <IconButton
-        icon="trash-can-outline"
-        mode="contained"
-        onPress={() => setModalVisible(true)}
-      />
+      <IconButton icon="trash-can-outline" mode="contained" onPress={() => setModalVisible(true)} />
     );
 
     const BotaoEditar = () => (
       <IconButton
         icon="pencil-outline"
         mode="contained"
-        onPress={() => { setEditingName(item.nome); setEditModalVisible(true); }}
+        onPress={() => {
+          setEditingName(item.nome);
+          setEditModalVisible(true);
+        }}
       />
     );
 
@@ -89,7 +99,7 @@ export default function Lista() {
         onPress={() => selecionarPessoa(item)}
         left={() => (
           <View style={styles.avatarRow}>
-            <Avatar.Text size={40} label={avatarLabel}/>
+            <Avatar.Text size={40} label={avatarLabel} />
           </View>
         )}
         right={(props) => (
@@ -98,7 +108,7 @@ export default function Lista() {
             {selecionado && <BotaoEditar {...props} />}
           </View>
         )}
-      ></List.Item>
+      />
     );
   };
 
@@ -106,6 +116,13 @@ export default function Lista() {
     <View style={styles.container}>
       <List.Section>
         <List.Subheader>
+          <View style={styles.container}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Digite para buscar..."
+              onChangeText={(text) => setText(text)}
+            />
+          </View>
           <View style={styles.cabecalho}>
             <Text style={styles.cabecalho_titulo} variant="bodyLarge">
               Pessoas cadastradas
@@ -120,7 +137,7 @@ export default function Lista() {
         </List.Subheader>
       </List.Section>
       <FlatList
-        data={pessoas}
+        data={text === '' ? pessoas : filteredData}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         ItemSeparatorComponent={Divider}
@@ -164,7 +181,6 @@ export default function Lista() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, minHeight: 200 },
   lista_mensagem_vazio: { marginHorizontal: 16 },
   cabecalho: {
     flex: 1,
@@ -185,9 +201,28 @@ const styles = StyleSheet.create({
   buttonsRow: {
     flexDirection: 'row',
   },
-  avatarRow: { 
-    flexDirection: 'row', 
+  avatarRow: {
+    flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 16
-  }
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    padding: 10,
+    flex: 1,
+    flexGrow: 1,
+  },
+  flatList: {
+    flex: 1,
+  },
+  item: {
+    padding: 10,
+    fontSize: 18,
+  },
 });

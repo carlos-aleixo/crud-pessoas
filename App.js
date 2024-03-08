@@ -12,6 +12,7 @@ import { AppProvider } from './componentes/provider';
 import Lista from './componentes/lista';
 import Formulario from './componentes/Formulario';
 import BotaoSobre from './componentes/Sobre'
+import Busca from './componentes/Busca';
 
 const theme = {
   ...DefaultTheme,
