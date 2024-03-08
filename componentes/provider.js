@@ -12,12 +12,14 @@ const AppContext = createContext();
  * * um evento de pessoa adicionada
  * * um evento de pessoa removida
  * * um evento de pessoa selecionada
+ * * um evento de pessoa editada
  */
 export function AppProvider({
   children,
   onAdicionarPessoa,
   onSelecionarPessoa,
   onRemoverPessoa,
+  onEditarPessoa,
 }) {
   const [pessoas, setPessoas] = useState([]);
   const [pessoaSelecionada, setPessoaSelecionada] = useState();
@@ -78,6 +80,16 @@ export function AppProvider({
     }
   };
 
+  const editarPessoa = (pessoa, novoNome) => {
+    const lista = pessoas.map((p) =>
+      p.id === pessoa.id ? { ...p, nome: novoNome } : p
+    );
+    setPessoas(lista);
+    if (onEditarPessoa) {
+      onEditarPessoa(pessoa, novoNome);
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -86,6 +98,7 @@ export function AppProvider({
         removerPessoa,
         selecionarPessoa,
         pessoaSelecionada,
+        editarPessoa,
       }}>
       {children}
     </AppContext.Provider>

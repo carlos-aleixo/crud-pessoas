@@ -8,6 +8,7 @@ import {
   Modal,
   Portal,
   Button,
+  TextInput,
 } from 'react-native-paper';
 import { useAppContext } from './provider';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,13 +22,14 @@ import { useState } from 'react';
  * um botão que permite excluir o item da lista de pessoas.
  */
 export default function Lista() {
-  const { pessoas, pessoaSelecionada, selecionarPessoa, removerPessoa } =
+  const { pessoas, pessoaSelecionada, selecionarPessoa, removerPessoa, editarPessoa } =
     useAppContext();
 
   const { colors, isV3 } = useTheme();
   const safeArea = useSafeAreaInsets();
-
   const [modalVisible, setModalVisible] = useState(false);
+  const [editingName, setEditingName] = useState('');
+  const [editModalVisible, setEditModalVisible] = useState(false);
 
   const confirmarExclusao = () => {
     removerPessoa(pessoaSelecionada);
@@ -38,6 +40,15 @@ export default function Lista() {
     setModalVisible(false);
   };
 
+  const confirmarEdicao = () => {
+    editarPessoa(pessoaSelecionada, editingName);
+    setEditModalVisible(false);
+  };
+
+  const cancelarEdicao = () => {
+    setEditModalVisible(false);
+  };
+
   /**
    * Esta função é utilizada para renderizar um item da lista.
    * Se o item da lista estiver selecionado, então adota
@@ -46,25 +57,40 @@ export default function Lista() {
    * excluir da lista de pessoas.
    */
   const renderItem = ({ item }) => {
+
     const selecionado = item.id == pessoaSelecionada?.id;
-    const BotaoRemover = () => {
-      return (
-        <IconButton
-          icon="trash-can-outline"
-          mode="contained"
-          onPress={() => setModalVisible(true)}
-        />
-      );
-    };
+
+    const BotaoRemover = () => (
+      <IconButton
+        icon="trash-can-outline"
+        mode="contained"
+        onPress={() => setModalVisible(true)}
+      />
+    );
+
+    const BotaoEditar = () => (
+      <IconButton
+        icon="pencil-outline"
+        mode="contained"
+        onPress={() => { setEditingName(item.nome); setEditModalVisible(true); }}
+      />
+    );
+
     return (
       <List.Item
         title={item.nome}
         style={selecionado && styles.item_selecionado}
         onPress={() => selecionarPessoa(item)}
-        right={selecionado && BotaoRemover}
+        right={(props) => (
+          <View style={styles.buttonsRow}>
+            {selecionado && <BotaoRemover {...props} />}
+            {selecionado && <BotaoEditar {...props} />}
+          </View>
+        )}
       ></List.Item>
     );
   };
+
   return (
     <View style={styles.container}>
       <List.Section>
@@ -106,8 +132,23 @@ export default function Lista() {
             <Button onPress={cancelarExclusao}>Cancelar</Button>
           </View>
         </Modal>
+        <Modal
+          visible={editModalVisible}
+          onDismiss={() => setEditModalVisible(false)}
+          contentContainerStyle={styles.modal}
+        >
+          <View>
+            <TextInput
+              value={editingName}
+              onChangeText={setEditingName}
+              placeholder="Novo nome"
+            />
+            <Button onPress={confirmarEdicao}>Salvar</Button>
+            <Button onPress={cancelarEdicao}>Cancelar</Button>
+          </View>
+        </Modal>
       </Portal>
-    </View>
+    </View >
   );
 }
 
@@ -129,5 +170,8 @@ const styles = StyleSheet.create({
     padding: 20,
     margin: 20,
     borderRadius: 8,
+  },
+  buttonsRow: {
+    flexDirection: 'row',
   },
 });
